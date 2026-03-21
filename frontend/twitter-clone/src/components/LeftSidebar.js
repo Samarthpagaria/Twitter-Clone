@@ -118,7 +118,7 @@ function LeftSidebar() {
 
       {/* Post-Button */}
 
-      <button className="px-4 py-2 border-none text-md bg-[#109BF0] w-full rounded-full text-white font-bold hover:scale-105 ">
+      <button className="px-4 py-2 border-none text-md bg-[#1D9BF0] w-full rounded-full text-white font-bold hover:scale-105 transition-all duration-200 ">
         Post
       </button>
     </div>

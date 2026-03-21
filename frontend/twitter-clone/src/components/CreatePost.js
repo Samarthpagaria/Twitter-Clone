@@ -5,8 +5,7 @@ import { IoImagesOutline } from "react-icons/io5";
 import { TWEET_API_ENDPOINT } from "../utils/constant";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import store from "../redux/store";
-import { getAllTweets, getRefresh, getIsActive } from "../redux/tweetSlice";
+import { getRefresh, getIsActive } from "../redux/tweetSlice";
 
 function CreatePost() {
   const { user } = useSelector((store) => store.user);
@@ -28,7 +27,7 @@ function CreatePost() {
         toast.success(res.data.message);
       }
     } catch (error) {
-      toast.error(error.res.data.message);
+      toast.error(error.response?.data?.message || "Something went wrong");
 
       console.log(error);
     }

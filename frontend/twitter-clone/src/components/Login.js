@@ -40,7 +40,7 @@ function Login() {
           toast.success(res.data.message);
         }
       } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.response?.data?.message || "Internal Server Error");
         console.log(error);
       }
     } else {
@@ -67,7 +67,7 @@ function Login() {
           toast.success(res.data.message);
         }
       } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.response?.data?.message || "Internal Server Error");
         console.log(error);
       }
     }

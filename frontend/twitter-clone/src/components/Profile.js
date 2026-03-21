@@ -67,16 +67,19 @@ function Profile() {
             <p className="text-gray-500 text-sm">10 post</p>
           </div>
         </div>
-        <img
-          src="https://i.pinimg.com/736x/3a/6c/45/3a6c4593fc421a0496b8f41b6528aaee.jpg"
-          alt="banner"
-        />
-        <div className="absolute top-40 ml-2 border-4 border-white rounded-full">
-          <Avatar
-            src="https://cdn-icons-png.freepik.com/512/3550/3550439.png"
-            size="150"
-            round={true}
+        <div className="relative">
+          <img
+            src="https://i.pinimg.com/736x/3a/6c/45/3a6c4593fc421a0496b8f41b6528aaee.jpg"
+            alt="banner"
+            className="w-full h-40 object-cover"
           />
+          <div className="absolute top-24 ml-2 border-4 border-white rounded-full">
+            <Avatar
+              src="https://cdn-icons-png.freepik.com/512/3550/3550439.png"
+              size="120"
+              round={true}
+            />
+          </div>
         </div>
         <div className="text-right m-4">
           {profile?._id === user?._id ? (

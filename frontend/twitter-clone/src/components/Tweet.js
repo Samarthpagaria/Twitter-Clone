@@ -28,7 +28,7 @@ const Tweet = ({ tweet }) => {
       dispatch(getRefresh());
       toast.success(res.data.message);
     } catch (error) {
-      toast.success(error.response.data.message);
+      toast.error(error.response?.data?.message || "Error liking tweet");
       console.log(error);
     }
   };
@@ -40,7 +40,7 @@ const Tweet = ({ tweet }) => {
       dispatch(getRefresh());
       toast.success(res.data.message);
     } catch (error) {
-      toast.success(error.response.data.message);
+      toast.error(error.response?.data?.message || "Error deleting tweet");
       console.log(error);
     }
   };

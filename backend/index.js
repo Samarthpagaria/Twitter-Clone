@@ -1,5 +1,8 @@
 import express from "express";
+import dns from "dns";
 import dotenv from "dotenv";
+
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 import databaseConnection from "./config/database.js";
 import cookieParser from "cookie-parser";
 import userRoute from "./routes/userRoute.js";

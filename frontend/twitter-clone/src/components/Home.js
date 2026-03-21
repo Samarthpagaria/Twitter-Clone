@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
 import LeftSidebar from "../components/LeftSidebar.js";
 import RightSidebar from "../components/RightSidebar.js";
-import Feed from "../components/Feed.js";
 import { Outlet, useNavigate } from "react-router-dom";
-import store from "../redux/store.js";
 import useOtherUsers from "../hooks/useOtherUsers.js";
 import { useSelector } from "react-redux";
 import useGetMyTweets from "../hooks/useGetMyTweets.js";
@@ -22,7 +20,7 @@ function Home() {
   useGetMyTweets(user?._id);
 
   return (
-    <div className="flex justify-between w-[80%] mx-auto">
+    <div className="flex justify-between w-full max-w-7xl mx-auto px-4">
       <LeftSidebar />
       <Outlet />
       <RightSidebar otherUsers={otherUsers} />
