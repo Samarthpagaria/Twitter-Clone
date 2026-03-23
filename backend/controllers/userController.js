@@ -127,7 +127,7 @@ export const getOtherUser = async (req, res) => {
   try {
     const loggedInUserId = req.params.id;
     const otherUsers = await User.find({ _id: { $ne: loggedInUserId } }).select(
-      "-password"
+      "-password",
     );
     if (!otherUsers) {
       return res.status(401).json({
@@ -189,3 +189,78 @@ export const unfollow = async (req, res) => {
     console.log(error);
   }
 };
+export const updateMyProfile = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { name, username, email } = req.body;
+    const user = await User.findByIdAndUpdate(
+      id,
+      { name, username, email },
+      { new: true, runValidators: true }
+    );
+    return res.status(200).json({
+      message: "Profile updated successfully.",
+      user,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "An error occurred while updating profile.",
+      success: false,
+    });
+  }
+};
+export const updatePassword = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { oldPassword, newPassword } = req.body;
+    
+    if (!oldPassword || !newPassword) {
+      return res.status(400).json({
+        message: "Both old and new passwords are required.",
+        success: false,
+      });
+    }
+
+    const user = await User.findById(id);
+    
+    // Verify old password
+    const isOldMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isOldMatch) {
+      return res.status(401).json({
+        message: "Current password is incorrect.",
+        success: false,
+      });
+    }
+
+    // Ensure new password is different
+    const isNewSameAsOld = await bcrypt.compare(newPassword, user.password);
+    if (isNewSameAsOld) {
+      return res.status(400).json({
+        message: "New password cannot be the same as the current password.",
+        success: false,
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    await User.findByIdAndUpdate(
+      id,
+      { password: hashedPassword },
+      { new: true, runValidators: true }
+    );
+
+    return res.status(200).json({
+      message: "Password updated successfully.",
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "An error occurred while updating password.",
+      success: false,
+    });
+  }
+};
+
+

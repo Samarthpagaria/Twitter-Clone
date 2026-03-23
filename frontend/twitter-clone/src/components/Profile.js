@@ -1,22 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoMdArrowBack } from "react-icons/io";
 import { Link, useParams } from "react-router-dom";
 import Avatar from "react-avatar";
 import { useSelector, useDispatch } from "react-redux";
 
 import useGetProfile from "../hooks/useGetProfile.js";
-import store from "../redux/store.js";
 import axios from "axios";
 import { USER_API_ENDPOINT } from "../utils/constant.js";
 import toast from "react-hot-toast";
 import { followingUpdate } from "../redux/userSlice.js";
 import { getRefresh } from "../redux/tweetSlice.js";
+import EditProfileModal from "./EditProfileModal.js";
+import ChangePasswordModal from "./ChangePasswordModal.js";
 
 function Profile() {
   const { user, profile } = useSelector((store) => store.user);
   const { id } = useParams();
   useGetProfile(id);
   const dispatch = useDispatch();
+
+  const [editOpen, setEditOpen] = useState(false);
+  const [passwordOpen, setPasswordOpen] = useState(false);
 
   const followAndUnfollowHandler = async () => {
     if (user.following.includes(id)) {
@@ -64,7 +68,7 @@ function Profile() {
           </Link>
           <div className="ml-2">
             <h1 className="font-bold text-lg">{profile?.name}</h1>
-            <p className="text-gray-500 text-sm">10 post</p>
+            <p className="text-gray-500 text-sm">Post Content</p>
           </div>
         </div>
         <div className="relative">
@@ -81,15 +85,26 @@ function Profile() {
             />
           </div>
         </div>
-        <div className="text-right m-4">
+        <div className="text-right m-4 flex justify-end gap-2 mt-12">
           {profile?._id === user?._id ? (
-            <button className="px-4 py-1 hover:bg-gray-200 rounded-full border border-gray-400">
-              Edit Profile
-            </button>
+            <>
+              <button
+                onClick={() => setEditOpen(true)}
+                className="px-4 py-1 hover:bg-gray-200 rounded-full border border-gray-400 font-semibold transition-all"
+              >
+                Edit Profile
+              </button>
+              <button
+                onClick={() => setPasswordOpen(true)}
+                className="px-4 py-1 hover:bg-gray-200 rounded-full border border-gray-400 font-semibold transition-all"
+              >
+                Change Password
+              </button>
+            </>
           ) : (
             <button
               onClick={followAndUnfollowHandler}
-              className="px-4 py-1 bg-black text-white rounded-full"
+              className="px-6 py-1 bg-black text-white rounded-full font-bold hover:bg-gray-800 transition-all"
             >
               {user.following.includes(id) ? "Following" : "Follow"}
             </button>
@@ -97,17 +112,24 @@ function Profile() {
         </div>
         <div className="m-4">
           <h1 className="font-bold text-xl">{profile?.name}</h1>
-          <p>{`@${profile?.username}`}</p>
+          <p className="text-gray-500">{`@${profile?.username}`}</p>
         </div>
-        <div className="text-sm m-4">
+        <div className="text-sm m-4 leading-relaxed">
           <p>
             🌍 Tech enthusiast | 💻 Building the web, one line of code at a time
             | 🚀 Lifelong learner, dreaming big and shipping fast!
           </p>
         </div>
       </div>
+
+      <EditProfileModal isOpen={editOpen} onClose={() => setEditOpen(false)} />
+      <ChangePasswordModal
+        isOpen={passwordOpen}
+        onClose={() => setPasswordOpen(false)}
+      />
     </div>
   );
 }
 
 export default Profile;
+

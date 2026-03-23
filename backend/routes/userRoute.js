@@ -8,6 +8,8 @@ import {
   login,
   logout,
   unfollow,
+  updateMyProfile,
+  updatePassword,
 } from "../controllers/userController.js";
 import isAuthenticated from "../config/auth.js";
 
@@ -20,5 +22,7 @@ router.route("/profile/:id").get(isAuthenticated, getMyProfile);
 router.route("/otherUser/:id").get(isAuthenticated, getOtherUser);
 router.route("/follow/:id").post(isAuthenticated, follow);
 router.route("/unfollow/:id").post(isAuthenticated, unfollow);
+router.route("/update/myprofile/:id").put(isAuthenticated, updateMyProfile);
+router.route("/update/password/:id").put(isAuthenticated, updatePassword);
 
 export default router;
