@@ -1,16 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import './assets/fonts/satoshi/css/satoshi.css';
+
+:root {
+  --font-satoshi: 'Satoshi-Variable', sans-serif;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: var(--font-satoshi);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: white;
+  color: #111;
+}
+
+button, input, textarea {
+  font-family: inherit;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: 'Satoshi-Regular', monospace;
 }
+
