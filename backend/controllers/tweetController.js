@@ -173,3 +173,40 @@ export const getSearchedTweets = async (req, res) => {
     });
   }
 };
+
+export const getBookmarks = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id).select("bookmarks").lean();
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found.",
+        success: false,
+      });
+    }
+
+    if (!user.bookmarks || user.bookmarks.length === 0) {
+      return res.status(200).json({
+        bookmarks: [],
+        success: true,
+      });
+    }
+
+    const bookmarks = await Tweet.find({ _id: { $in: user.bookmarks } })
+      .populate({ path: "userId", select: "name username" })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    return res.status(200).json({
+      bookmarks,
+      success: true,
+    });
+  } catch (error) {
+    console.error("Bookmarks fetch error:", error);
+    return res.status(500).json({
+      message: "An error occurred while fetching bookmarks.",
+      success: false,
+    });
+  }
+};
