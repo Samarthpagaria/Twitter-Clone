@@ -1,6 +1,7 @@
 import User from "../models/UserSchema.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 export const Register = async (req, res) => {
   try {
@@ -196,7 +197,7 @@ export const updateMyProfile = async (req, res) => {
     const user = await User.findByIdAndUpdate(
       id,
       { name, username, email },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
     return res.status(200).json({
       message: "Profile updated successfully.",
@@ -215,7 +216,7 @@ export const updatePassword = async (req, res) => {
   try {
     const id = req.params.id;
     const { oldPassword, newPassword } = req.body;
-    
+
     if (!oldPassword || !newPassword) {
       return res.status(400).json({
         message: "Both old and new passwords are required.",
@@ -224,7 +225,7 @@ export const updatePassword = async (req, res) => {
     }
 
     const user = await User.findById(id);
-    
+
     // Verify old password
     const isOldMatch = await bcrypt.compare(oldPassword, user.password);
     if (!isOldMatch) {
@@ -247,7 +248,7 @@ export const updatePassword = async (req, res) => {
     await User.findByIdAndUpdate(
       id,
       { password: hashedPassword },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     return res.status(200).json({
@@ -263,4 +264,79 @@ export const updatePassword = async (req, res) => {
   }
 };
 
+// Helper to escape special regex characters
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+export const searchUsers = async (req, res) => {
+  try {
+    
+    const keyword = req.query.name?.trim();
+
+    if (!keyword) {
+      return res.status(400).json({
+        message: "Search keyword is required.",
+        success: false,
+      });
+    }
+
+    if (keyword.length < 2) {
+      return res.status(400).json({
+        message: "Search keyword must be at least 2 characters.",
+        success: false,
+      });
+    }
+
+    if (keyword.length > 50) {
+      return res.status(400).json({
+        message: "Search keyword too long.",
+        success: false,
+      });
+    }
+
+   
+    const safeKeyword = escapeRegex(keyword);
+
+    const searchRegex = new RegExp(safeKeyword, "i");
+
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.min(20, parseInt(req.query.limit) || 10);   
+    const skip = (page - 1) * limit;
+    const [users, total] = await Promise.all([
+      User.find({
+        $or: [
+          { name: { $regex: searchRegex } },
+          { username: { $regex: searchRegex } },
+        ],
+      })
+        .select("-password -__v")
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+
+      User.countDocuments({
+        $or: [
+          { name: { $regex: searchRegex } },
+          { username: { $regex: searchRegex } },
+        ],
+      }),
+    ]);
+
+    return res.status(200).json({
+      users,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+        hasMore: page * limit < total,
+      },
+      success: true,
+    });
+  } catch (error) {
+    console.error("Search error:", error);
+    return res.status(500).json({
+      message: "An error occurred while searching users.",
+      success: false,
+    });
+  }
+};
