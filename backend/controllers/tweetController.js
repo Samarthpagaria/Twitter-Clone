@@ -174,39 +174,46 @@ export const getSearchedTweets = async (req, res) => {
   }
 };
 
-export const getBookmarks = async (req, res) => {
+export const toggleBookmark = async (req, res) => {
   try {
-    const { id } = req.params;
-    const user = await User.findById(id).select("bookmarks").lean();
+    const userId = req.user._id;           // Use from middleware (best)
+    const tweetId = req.params.id;
 
-    if (!user) {
-      return res.status(404).json({
-        message: "User not found.",
-        success: false,
-      });
+    if (!tweetId) {
+      return res.status(400).json({ success: false, message: "Tweet ID is required" });
     }
 
-    if (!user.bookmarks || user.bookmarks.length === 0) {
+    // Optional: Check if tweet exists
+    const tweet = await mongoose.model("Tweet").findById(tweetId);
+    if (!tweet) {
+      return res.status(404).json({ success: false, message: "Tweet not found" });
+    }
+
+    const user = await User.findById(userId);
+
+    const isAlreadyBookmarked = user.bookmarks.includes(tweetId);
+
+    if (isAlreadyBookmarked) {
+      await User.findByIdAndUpdate(userId, {
+        $pull: { bookmarks: tweetId },
+      });
       return res.status(200).json({
-        bookmarks: [],
         success: true,
+        message: "Tweet removed from bookmarks",
+        bookmarked: false,
+      });
+    } else {
+      await User.findByIdAndUpdate(userId, {
+        $addToSet: { bookmarks: tweetId },   // Safer than $push
+      });
+      return res.status(200).json({
+        success: true,
+        message: "Tweet added to bookmarks",
+        bookmarked: true,
       });
     }
-
-    const bookmarks = await Tweet.find({ _id: { $in: user.bookmarks } })
-      .populate({ path: "userId", select: "name username" })
-      .sort({ createdAt: -1 })
-      .lean();
-
-    return res.status(200).json({
-      bookmarks,
-      success: true,
-    });
   } catch (error) {
-    console.error("Bookmarks fetch error:", error);
-    return res.status(500).json({
-      message: "An error occurred while fetching bookmarks.",
-      success: false,
-    });
+    console.error("Toggle Bookmark Error:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };

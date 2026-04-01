@@ -11,6 +11,7 @@ import {
   updateMyProfile,
   updatePassword,
   searchUsers,
+  getBookmarks,
 } from "../controllers/userController.js";
 import isAuthenticated from "../config/auth.js";
 
@@ -26,5 +27,6 @@ router.route("/unfollow/:id").post(isAuthenticated, unfollow);
 router.route("/update/myprofile/:id").put(isAuthenticated, updateMyProfile);
 router.route("/update/password/:id").put(isAuthenticated, updatePassword);
 router.route("/search").get(isAuthenticated, searchUsers);
+router.route("/bookmarks/:id").get(isAuthenticated, getBookmarks);
 
 export default router;
