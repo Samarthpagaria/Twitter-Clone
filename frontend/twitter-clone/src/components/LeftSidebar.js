@@ -93,14 +93,14 @@ function LeftSidebar() {
 
       {/* Bookmarks */}
 
-      <div className="my-4">
+      <Link to="/bookmarks" className="my-4">
         <div className="flex items-center  my-2 rounded-full px-4 py-2   hover:bg-gray-300  hover:cursor-pointer hover:scale-105">
           <div>
             <FaBookmark size="24px" />
           </div>
           <h1 className="font-bold text-lg ml-4">Bookmarks</h1>
         </div>
-      </div>
+      </Link>
 
       {/* Logout */}
 

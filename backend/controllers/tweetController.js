@@ -176,15 +176,14 @@ export const getSearchedTweets = async (req, res) => {
 
 export const toggleBookmark = async (req, res) => {
   try {
-    const userId = req.user._id;           // Use from middleware (best)
+    const userId = req.user; // req.user is the raw userid string from JWT
     const tweetId = req.params.id;
 
     if (!tweetId) {
       return res.status(400).json({ success: false, message: "Tweet ID is required" });
     }
 
-    // Optional: Check if tweet exists
-    const tweet = await mongoose.model("Tweet").findById(tweetId);
+    const tweet = await Tweet.findById(tweetId);
     if (!tweet) {
       return res.status(404).json({ success: false, message: "Tweet not found" });
     }
@@ -204,7 +203,7 @@ export const toggleBookmark = async (req, res) => {
       });
     } else {
       await User.findByIdAndUpdate(userId, {
-        $addToSet: { bookmarks: tweetId },   // Safer than $push
+        $addToSet: { bookmarks: tweetId },
       });
       return res.status(200).json({
         success: true,

@@ -4,6 +4,7 @@ import Home from "./components/Home.js";
 import Login from "./components/Login.js";
 import "./index.css";
 import Profile from "./components/Profile.js";
+import Bookmarks from "./components/Bookmarks.js";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Feed from "./components/Feed.js";
 import { Toaster } from "react-hot-toast";
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "/profile/:id",
         element: <Profile />,
+      },
+      {
+        path: "/bookmarks",
+        element: <Bookmarks />,
       },
     ],
   },
