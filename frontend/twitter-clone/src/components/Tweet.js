@@ -17,6 +17,10 @@ const Tweet = ({ tweet }) => {
   const { user } = useSelector((store) => store.user);
   const dispatch = useDispatch();
 
+  const tweetUser = Array.isArray(tweet?.userDetails) 
+    ? tweet?.userDetails[0] 
+    : tweet?.userDetails || (typeof tweet?.userId === 'object' ? tweet?.userId : null);
+
   const isBookmarked = user?.bookmarks?.includes(tweet?._id);
 
   const likeOrDislikeHandler = async (id) => {
@@ -72,10 +76,10 @@ const Tweet = ({ tweet }) => {
         />
         <div className="ml-2 w-full">
           <div className="flex items-center">
-            <h1 className="font-bold">{tweet?.userDetails?.[0]?.name}</h1>
-            <p className="text-gray-500 text-sm ml-1">{`@${
-              tweet?.userDetails?.[0]?.username
-            } · ${timeSince(tweet?.createdAt)}`}</p>
+            <h1 className="font-bold">{tweetUser?.name || "Unknown"}</h1>
+            <p className="text-gray-500 text-sm ml-1">
+              {tweetUser?.username ? `@${tweetUser.username}` : ""} · {timeSince(tweet?.createdAt)}
+            </p>
           </div>
           <div>
             <p className="mt-1">{tweet?.description}</p>
@@ -122,7 +126,7 @@ const Tweet = ({ tweet }) => {
             </div>
 
             {/* Delete (own tweets only) */}
-            {user?._id === tweet?.userId && (
+            {user?._id === (typeof tweet?.userId === 'object' ? tweet?.userId?._id : tweet?.userId) && (
               <div
                 onClick={() => deleteTweetHandler(tweet?._id)}
                 className="flex items-center"

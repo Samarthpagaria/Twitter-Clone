@@ -1,5 +1,6 @@
 import Tweet from "../models/tweetSchema.js";
 import User from "../models/UserSchema.js";
+import mongoose from "mongoose";
 
 import { getOtherUser } from "./userController.js";
 
@@ -69,18 +70,46 @@ export const likeOrDislike = async (req, res) => {
 };
 
 export const getAllTweets = async (req, res) => {
-  // loggedInUser ka tweet + following user tweet
   try {
     const id = req.params.id;
     const loggedInUser = await User.findById(id);
-    const loggedInUserTweets = await Tweet.find({ userId: id });
+
+    // 1. Logged in user tweets
+    const loggedInUserTweets = await Tweet.find({ userId: id }).populate({
+      path: "userId",
+      select: "name username",
+    });
+
+    // 2. Following user tweets
     const followingUserTweet = await Promise.all(
       loggedInUser.following.map((otherUsersId) => {
-        return Tweet.find({ userId: otherUsersId });
+        return Tweet.find({ userId: otherUsersId }).populate({
+          path: "userId",
+          select: "name username",
+        });
       })
     );
+
+    // 3. Random tweets from unfollowed users
+    // Extract ObjectIds correctly for aggregation
+    const excludeIds = [id, ...loggedInUser.following].map(
+      (uid) => new mongoose.Types.ObjectId(uid)
+    );
+
+    const randomTweets = await Tweet.aggregate([
+      { $match: { userId: { $nin: excludeIds } } },
+      { $sample: { size: 10 } },
+    ]);
+    await Tweet.populate(randomTweets, { path: "userId", select: "name username" });
+
+    // Combine all arrays
+    let allTweets = loggedInUserTweets.concat(...followingUserTweet, randomTweets);
+
+    // Sort combined tweets by newest first
+    allTweets.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
     return res.status(200).json({
-      tweets: loggedInUserTweets.concat(...followingUserTweet),
+      tweets: allTweets,
     });
   } catch (error) {
     console.log(error);
@@ -93,7 +122,10 @@ export const getfolowingTweets = async (req, res) => {
 
     const followingUsersTweets = await Promise.all(
       loggedInUser.following.map((otherUsersId) => {
-        return Tweet.find({ userId: otherUsersId });
+        return Tweet.find({ userId: otherUsersId }).populate({
+          path: "userId",
+          select: "name username",
+        });
       })
     );
     return res.status(200).json({
@@ -107,7 +139,9 @@ export const getfolowingTweets = async (req, res) => {
 export const getProfileTweets = async (req, res) => {
   try {
     const id = req.params.id;
-    const tweets = await Tweet.find({ userId: id }).sort({ createdAt: -1 });
+    const tweets = await Tweet.find({ userId: id })
+      .populate({ path: "userId", select: "name username" })
+      .sort({ createdAt: -1 });
     return res.status(200).json({
       tweets,
       success: true,
