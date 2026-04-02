@@ -7,6 +7,7 @@ import {
   likeOrDislike,
   getSearchedTweets,
   toggleBookmark,
+  getProfileTweets,
 } from "../controllers/tweetController.js";
 import isAuthenticated from "../config/auth.js";
 
@@ -16,6 +17,7 @@ router.route("/delete/:id").delete(isAuthenticated, deleteTweet);
 router.route("/like/:id").put(isAuthenticated, likeOrDislike);
 router.route("/alltweets/:id").get(isAuthenticated, getAllTweets);
 router.route("/followingtweets/:id").get(isAuthenticated, getfolowingTweets);
+router.route("/profiletweets/:id").get(isAuthenticated, getProfileTweets);
 router.route("/search").get(isAuthenticated, getSearchedTweets);
 router.route("/bookmark/:id").put(isAuthenticated, toggleBookmark);
 export default router;

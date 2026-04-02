@@ -16,8 +16,10 @@ const useOtherUsers = (id) => {
         console.error(error);
       }
     };
-    fetchOtherUsers();
-  }, []);
+    if (id) {
+      fetchOtherUsers();
+    }
+  }, [id, dispatch]);
 };
 
 export default useOtherUsers;

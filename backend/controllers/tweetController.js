@@ -104,6 +104,23 @@ export const getfolowingTweets = async (req, res) => {
   }
 };
 
+export const getProfileTweets = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const tweets = await Tweet.find({ userId: id }).sort({ createdAt: -1 });
+    return res.status(200).json({
+      tweets,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "An error occurred while fetching user tweets.",
+      success: false,
+    });
+  }
+};
+
 
 // Helper to escape special regex characters (prevents ReDoS attacks)
 const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

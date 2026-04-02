@@ -12,15 +12,36 @@ import { followingUpdate } from "../redux/userSlice.js";
 import { getRefresh } from "../redux/tweetSlice.js";
 import EditProfileModal from "./EditProfileModal.js";
 import ChangePasswordModal from "./ChangePasswordModal.js";
+import Tweet from "./Tweet.js";
+import { TWEET_API_ENDPOINT } from "../utils/constant.js";
+import { useEffect } from "react";
 
 function Profile() {
   const { user, profile } = useSelector((store) => store.user);
+  const { refresh } = useSelector((store) => store.tweet);
   const { id } = useParams();
   useGetProfile(id);
   const dispatch = useDispatch();
 
   const [editOpen, setEditOpen] = useState(false);
   const [passwordOpen, setPasswordOpen] = useState(false);
+  const [profileTweets, setProfileTweets] = useState([]);
+
+  useEffect(() => {
+    const fetchProfileTweets = async () => {
+      try {
+        const res = await axios.get(`${TWEET_API_ENDPOINT}/profiletweets/${id}`, {
+          withCredentials: true,
+        });
+        setProfileTweets(res.data.tweets);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (id) {
+      fetchProfileTweets();
+    }
+  }, [id, refresh]);
 
   const followAndUnfollowHandler = async () => {
     if (user.following.includes(id)) {
@@ -120,6 +141,11 @@ function Profile() {
             | 🚀 Lifelong learner, dreaming big and shipping fast!
           </p>
         </div>
+      </div>
+      <div className="border-t border-gray-200 mt-4">
+        {profileTweets?.map((tweet) => (
+          <Tweet key={tweet._id} tweet={tweet} />
+        ))}
       </div>
 
       <EditProfileModal isOpen={editOpen} onClose={() => setEditOpen(false)} />

@@ -23,7 +23,7 @@ const useGetMyTweets = (id) => {
     try {
       axios.defaults.withCredentials = true;
       const res = await axios.get(
-        `${TWEET_API_ENDPOINT}/followingtweets/${id}`
+        `${TWEET_API_ENDPOINT}/followingtweets/${id}`,
       );
       console.log(res);
       dispatch(getAllTweets(res.data.tweets));
@@ -33,11 +33,13 @@ const useGetMyTweets = (id) => {
   };
 
   useEffect(() => {
-    if (isActive) {
-      fetchMyTweets();
-    } else {
-      followingTweetHandler();
+    if (id) {
+      if (isActive) {
+        fetchMyTweets();
+      } else {
+        followingTweetHandler();
+      }
     }
-  }, [isActive, refresh]);
+  }, [isActive, refresh, id]);
 };
 export default useGetMyTweets;
