@@ -15,6 +15,7 @@ import ChangePasswordModal from "./ChangePasswordModal.js";
 import Tweet from "./Tweet.js";
 import { TWEET_API_ENDPOINT } from "../utils/constant.js";
 import { useEffect } from "react";
+import { TweetSkeleton } from "./Skeletons.js";
 
 function Profile() {
   const { user, profile } = useSelector((store) => store.user);
@@ -25,7 +26,7 @@ function Profile() {
 
   const [editOpen, setEditOpen] = useState(false);
   const [passwordOpen, setPasswordOpen] = useState(false);
-  const [profileTweets, setProfileTweets] = useState([]);
+  const [profileTweets, setProfileTweets] = useState(null);
 
   useEffect(() => {
     const fetchProfileTweets = async () => {
@@ -143,9 +144,15 @@ function Profile() {
         </div>
       </div>
       <div className="border-t border-gray-200 mt-4">
-        {profileTweets?.map((tweet) => (
-          <Tweet key={tweet._id} tweet={tweet} />
-        ))}
+        {!profileTweets ? (
+          Array(4).fill(0).map((_, i) => <TweetSkeleton key={`skeleton-${i}`} />)
+        ) : profileTweets.length > 0 ? (
+          profileTweets.map((tweet) => (
+            <Tweet key={tweet._id} tweet={tweet} />
+          ))
+        ) : (
+          <p className="text-gray-500 text-center m-4 py-8">No tweets yet.</p>
+        )}
       </div>
 
       <EditProfileModal isOpen={editOpen} onClose={() => setEditOpen(false)} />

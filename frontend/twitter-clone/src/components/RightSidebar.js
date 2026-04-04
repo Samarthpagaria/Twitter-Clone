@@ -2,6 +2,7 @@ import React from "react";
 import { CiSearch } from "react-icons/ci";
 import Avatar from "react-avatar";
 import { Link } from "react-router-dom";
+import { UserSkeleton } from "./Skeletons.js";
 
 function RightSidebar({ otherUsers }) {
   // Ensure `otherUsers` is an array
@@ -25,11 +26,13 @@ function RightSidebar({ otherUsers }) {
       <div className="p-4 bg-gray-100 rounded-2xl my-4">
         <h1 className="font-bold text-lg">Who to follow</h1>
 
-        {users.length > 0 ? (
+        {!otherUsers ? (
+          Array(4).fill(0).map((_, i) => <UserSkeleton key={`skeleton-${i}`} />)
+        ) : users.length > 0 ? (
           users.map((user) => (
             <div
               className="flex items-center justify-between my-3"
-              key={user.id}
+              key={user.id || user._id}
             >
               <div className="flex">
                 <div>
@@ -49,7 +52,7 @@ function RightSidebar({ otherUsers }) {
               </div>
               <div>
                 <Link to={`/profile/${user?._id}`}>
-                  <button className="px-4 py-1 bg-black text-white rounded-full">
+                  <button className="px-4 py-1 bg-black text-white rounded-full transition-colors hover:bg-gray-800">
                     Profile
                   </button>
                 </Link>

@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getRefresh } from "../redux/tweetSlice";
 import { getUser } from "../redux/userSlice";
 import { timeSince } from "../utils/constant";
+import { TweetSkeleton } from "./Skeletons.js";
 
 const Tweet = ({ tweet, isReply = false }) => {
   const { user } = useSelector((store) => store.user);
@@ -238,7 +239,10 @@ const Tweet = ({ tweet, isReply = false }) => {
 
                {/* Render existing replies recursively */}
                {loadingReplies ? (
-                 <p className="text-xs text-gray-400 py-2">Loading conversation...</p>
+                 <div className="flex flex-col w-full relative pt-2 pl-4">
+                   <TweetSkeleton />
+                   <TweetSkeleton />
+                 </div>
                ) : replies.length > 0 ? (
                  <div className="flex flex-col w-full relative">
                    {replies.map((reply, index) => (

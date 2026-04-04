@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { USER_API_ENDPOINT, TWEET_API_ENDPOINT, timeSince } from "../utils/constant";
 import { getUser } from "../redux/userSlice";
 import { getRefresh } from "../redux/tweetSlice";
+import { TweetSkeleton } from "./Skeletons.js";
 
 const Bookmarks = () => {
   const { user } = useSelector((store) => store.user);
@@ -107,9 +108,8 @@ const Bookmarks = () => {
 
       {/* Content */}
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-20 gap-3">
-          <div className="w-8 h-8 rounded-full border-4 border-gray-200 border-t-blue-400 animate-spin" />
-          <p className="text-gray-400 text-sm">Loading bookmarks...</p>
+        <div className="flex flex-col w-full">
+           {Array(4).fill(0).map((_, i) => <TweetSkeleton key={`sk_bm_${i}`} />)}
         </div>
       ) : bookmarks.length === 0 ? (
         /* Empty State */
