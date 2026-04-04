@@ -48,7 +48,7 @@ function LeftSidebar() {
     }
   };
   return (
-    <div className="w-[20%]">
+    <div className="w-[20%] pt-2 sticky top-0 h-screen overflow-y-auto hidden-scrollbar">
       <div>
         <img
           className="ml-2"

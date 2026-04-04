@@ -47,7 +47,17 @@ button, input, textarea {
   font-family: inherit;
 }
 
+
 code {
   font-family: 'Satoshi-Regular', monospace;
+}
+
+/* Hide scrollbar for sidebars */
+.hidden-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hidden-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 

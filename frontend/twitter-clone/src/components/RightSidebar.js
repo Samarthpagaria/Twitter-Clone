@@ -17,7 +17,7 @@ function RightSidebar({ otherUsers }) {
   };
 
   return (
-    <div className="w-[25%] py-2">
+    <div className="w-[25%] py-2 sticky top-0 h-screen overflow-y-auto hidden-scrollbar">
       {/* Search Bar Redirect */}
       <form onSubmit={submitSearch} className="border bg-gray-100 outline-none w-full border-gray-200 p-2 rounded-full flex items-center mb-2 focus-within:ring-1 focus-within:ring-cyan-500 focus-within:bg-white transition-all transition-colors z-10 sticky top-2">
         <button type="submit" className="p-1 hover:bg-gray-200 rounded-full transition-colors cursor-pointer">
