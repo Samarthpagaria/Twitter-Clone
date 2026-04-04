@@ -6,29 +6,19 @@ const tweetSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      maxlength: 280, // Twitter-like character limit
+      maxlength: 280,
     },
-
-    // Likes - Should be array of User IDs (not just Array)
     likes: [
-      // Renamed from "like" → "likes" (plural is better)
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
     ],
-
-    // Who posted the tweet
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-
-    // Remove this field - Not recommended
-    // userDetails: { ... }     ← We'll use .populate() instead
-
-    // Future-ready fields (add these now, they'll be very useful)
     media: [
       {
         url: { type: String, required: true },
@@ -37,11 +27,9 @@ const tweetSchema = new mongoose.Schema(
           enum: ["image", "video"],
           required: true,
         },
-        publicId: String, // For Cloudinary (to delete later if needed)
+        publicId: String,
       },
     ],
-
-    // For retweets (we'll implement this soon)
     isRetweet: {
       type: Boolean,
       default: false,
@@ -50,8 +38,11 @@ const tweetSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Tweet",
     },
-
-    // For comments/replies (future)
+    replyTo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Tweet",
+      default: null,
+    },
     commentCount: {
       type: Number,
       default: 0,
@@ -62,7 +53,6 @@ const tweetSchema = new mongoose.Schema(
   },
 );
 
-// Optional: Create index for better search performance
-tweetSchema.index({ description: "text" }); // For full-text search
+tweetSchema.index({ description: "text" });
 
 export default mongoose.model("Tweet", tweetSchema);
