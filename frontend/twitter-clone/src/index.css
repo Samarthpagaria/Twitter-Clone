@@ -15,6 +15,32 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: white;
   color: #111;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html.dark body {
+  background-color: #09090b;
+  color: #fafafa;
+}
+
+/* Base override helper since most divs are bg-white */
+html.dark .bg-white {
+  background-color: #09090b !important;
+}
+html.dark .bg-gray-50, html.dark .bg-gray-100 {
+  background-color: #18181b !important;
+}
+html.dark .border-gray-200, html.dark .border-gray-300 {
+  border-color: #27272a !important;
+}
+html.dark .text-gray-900, html.dark .text-gray-800 {
+  color: #f4f4f5 !important;
+}
+html.dark .hover\:bg-gray-100:hover {
+  background-color: #27272a !important;
+}
+html.dark .hover\:bg-gray-200:hover {
+  background-color: #3f3f46 !important;
 }
 
 button, input, textarea {

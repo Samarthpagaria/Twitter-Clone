@@ -7,6 +7,7 @@ import databaseConnection from "./config/database.js";
 import cookieParser from "cookie-parser";
 import userRoute from "./routes/userRoute.js";
 import tweetRoute from "./routes/tweetRoute.js";
+import siteRoute from "./routes/siteRoute.js";
 import cors from "cors";
 
 //Setting up path for .env file variables
@@ -39,6 +40,7 @@ app.use(cors(corsOptions));
 //http://localhost:8080/api/v1/user/
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/tweet", tweetRoute);
+app.use("/api/v1/site", siteRoute);
 
 //running application
 app.listen(process.env.PORT, () => {

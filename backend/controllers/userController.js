@@ -195,10 +195,10 @@ export const unfollow = async (req, res) => {
 export const updateMyProfile = async (req, res) => {
   try {
     const id = req.params.id;
-    const { name, username, email } = req.body;
+    const { name, username, email, bio } = req.body;
     const user = await User.findByIdAndUpdate(
       id,
-      { name, username, email },
+      { name, username, email, bio },
       { new: true, runValidators: true },
     );
     return res.status(200).json({

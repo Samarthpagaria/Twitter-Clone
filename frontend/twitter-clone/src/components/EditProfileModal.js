@@ -12,6 +12,7 @@ const EditProfileModal = ({ isOpen, onClose }) => {
     name: user?.name || "",
     username: user?.username || "",
     email: user?.email || "",
+    bio: user?.bio || "",
   });
 
   const changeHandler = (e) => {
@@ -84,9 +85,22 @@ const EditProfileModal = ({ isOpen, onClose }) => {
               name="email"
               value={formData.email}
               onChange={changeHandler}
-              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all"
+              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all dark:bg-zinc-900 dark:border-zinc-800 dark:text-white"
               placeholder="email@example.com"
             />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5 ml-1">Bio</label>
+            <textarea
+              name="bio"
+              value={formData.bio}
+              onChange={changeHandler}
+              maxLength="160"
+              rows="3"
+              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all resize-none dark:bg-zinc-900 dark:border-zinc-800 dark:text-white"
+              placeholder="Tell us about yourself..."
+            ></textarea>
           </div>
 
           <div className="flex justify-end gap-2 pt-4 border-t border-gray-50 mt-2">

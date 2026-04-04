@@ -8,17 +8,28 @@ import { LiaSlackHash } from "react-icons/lia";
 // import boldTwitter from "../assets/image3.png";
 import { GoHomeFill } from "react-icons/go";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import axios from "axios";
 import { USER_API_ENDPOINT } from "../utils/constant";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getMyProfile, getOtherUsers, getUser } from "../redux/userSlice";
+import {  MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
 
 function LeftSidebar() {
   const { user, profile } = useSelector((store) => store.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [isDarkMode, setIsDarkMode] = React.useState(() => document.documentElement.classList.contains("dark"));
+
+  const toggleTheme = () => {
+    if (isDarkMode) {
+        document.documentElement.classList.remove("dark");
+        setIsDarkMode(false);
+    } else {
+        document.documentElement.classList.add("dark");
+        setIsDarkMode(true);
+    }
+  };
 
   const logoutHandler = async () => {
     try {
@@ -60,14 +71,14 @@ function LeftSidebar() {
 
       {/*Explore */}
 
-      <div className="my-4">
+      <Link to="/explore" className="my-4 block">
         <div className="flex items-center  my-2 rounded-full px-4 py-2   hover:bg-gray-300  hover:cursor-pointer hover:scale-105">
           <div>
             <LiaSlackHash size="24px" />
           </div>
           <h1 className="font-bold text-lg ml-4">Explore </h1>
         </div>
-      </div>
+      </Link>
 
       {/* Notifications*/}
 
@@ -113,6 +124,20 @@ function LeftSidebar() {
             <IoLogOut size="24px" />
           </div>
           <h1 className="font-bold text-lg ml-4">Logout</h1>
+        </div>
+      </div>
+
+      {/* Theme Toggle */}
+
+      <div className="my-4">
+        <div
+          onClick={toggleTheme}
+          className="flex items-center  my-2 rounded-full px-4 py-2   hover:bg-gray-300 dark:hover:bg-gray-800  hover:cursor-pointer hover:scale-105"
+        >
+          <div>
+            {isDarkMode ? <MdOutlineLightMode size="24px" className="text-yellow-400" /> : <MdOutlineDarkMode size="24px" className="text-gray-700" />}
+          </div>
+          <h1 className="font-bold text-lg ml-4 dark:text-white">{isDarkMode ? "Light Mode" : "Dark Mode"}</h1>
         </div>
       </div>
 

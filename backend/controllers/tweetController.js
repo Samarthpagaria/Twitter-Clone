@@ -207,18 +207,25 @@ export const getSearchedTweets = async (req, res) => {
     const skip = (page - 1) * limit;
 
     const [tweets, total] = await Promise.all([
-      Tweet.find({ description: { $regex: searchRegex } })
+      Tweet.find({ description: searchRegex })
         .populate({
           path: "userId",
-          select: "name username -password",
+          select: "name username",
         })
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
         .lean(),
 
-      Tweet.countDocuments({ description: { $regex: searchRegex } }),
+      Tweet.countDocuments({ description: searchRegex }),
     ]);
+
+    console.log(`===== BACKEND SEARCH DIAGNOSTICS =====`);
+    console.log(`Keyword Scanned: "${keyword}"`);
+    console.log(`Regex Used: /${safeKeyword}/i`);
+    console.log(`Tweets matched directly in DB: ${total}`);
+    console.log(`Tweets actually mapped to API payload: ${tweets.length}`);
+    console.log(`======================================`);
 
     return res.status(200).json({
       tweets,
@@ -234,7 +241,8 @@ export const getSearchedTweets = async (req, res) => {
   } catch (error) {
     console.error("Tweet search error:", error);
     return res.status(500).json({
-      message: "An error occurred while searching tweets.",
+      message: error.message || "An error occurred while searching tweets.",
+      error: error.toString(),
       success: false,
     });
   }

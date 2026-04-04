@@ -7,6 +7,7 @@ import Profile from "./components/Profile.js";
 import Bookmarks from "./components/Bookmarks.js";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Feed from "./components/Feed.js";
+import Explore from "./components/Explore.js";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "react-redux";
 import store from "./redux/store.js";
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: "/bookmarks",
         element: <Bookmarks />,
+      },
+      {
+        path: "/explore",
+        element: <Explore />,
       },
     ],
   },

@@ -136,11 +136,12 @@ function Profile() {
           <h1 className="font-bold text-xl">{profile?.name}</h1>
           <p className="text-gray-500">{`@${profile?.username}`}</p>
         </div>
-        <div className="text-sm m-4 leading-relaxed">
-          <p>
-            🌍 Tech enthusiast | 💻 Building the web, one line of code at a time
-            | 🚀 Lifelong learner, dreaming big and shipping fast!
-          </p>
+        <div className="text-sm m-4 leading-relaxed dark:text-gray-300 whitespace-pre-wrap">
+          {profile?.bio ? (
+            <p>{profile.bio}</p>
+          ) : (
+            <p className="opacity-50 italic">No bio written yet.</p>
+          )}
         </div>
       </div>
       <div className="border-t border-gray-200 mt-4">
