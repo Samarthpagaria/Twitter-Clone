@@ -6,7 +6,6 @@ import useOtherUsers from "../hooks/useOtherUsers.js";
 import { useSelector } from "react-redux";
 import useGetMyTweets from "../hooks/useGetMyTweets.js";
 import GlobalLikeCounter from "./GlobalLikeCounter.js";
-import useGetMyTweets from "../hooks/useGetMyTweets.js";
 
 function Home() {
   const { user, otherUsers } = useSelector((store) => store.user);

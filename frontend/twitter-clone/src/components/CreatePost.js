@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
 import Avatar from "react-avatar";
-import { IoImagesOutline } from "react-icons/io5";
 import { TWEET_API_ENDPOINT } from "../utils/constant";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,16 +44,16 @@ function CreatePost() {
   return (
     <div className="w-[100%]">
       <div>
-        <div className="flex items-center justify-evenly border-b border-gray-200">
+        <div className="flex items-center justify-evenly border-b border-gray-200 dark:border-gray-700">
           <div
             onClick={forYouHandler}
             className={`${
               isActive
                 ? "border-b-4 border-red-400"
                 : "border-b-4 border-transparent"
-            } cursor-pointer hover:bg-gray-200 w-full text-center px-4 py-3`}
+            } cursor-pointer hover:bg-gray-200 dark:hover:bg-zinc-800 transition-colors w-full text-center px-4 py-3`}
           >
-            <h1 className="font-semibold text-gray-600 text-lg">For you</h1>
+            <h1 className="font-semibold text-gray-600 dark:text-gray-300 text-lg">For you</h1>
           </div>
           <div
             onClick={followingHandler}
@@ -62,9 +61,9 @@ function CreatePost() {
               !isActive
                 ? "border-b-4 border-red-400"
                 : "border-b-4 border-transparent"
-            } cursor-pointer hover:bg-gray-200 w-full text-center px-4 py-3`}
+            } cursor-pointer hover:bg-gray-200 dark:hover:bg-zinc-800 transition-colors w-full text-center px-4 py-3`}
           >
-            <h1 className="font-semibold text-gray-600 text-lg">Following</h1>
+            <h1 className="font-semibold text-gray-600 dark:text-gray-300 text-lg">Following</h1>
           </div>
         </div>
         <div>
@@ -79,15 +78,14 @@ function CreatePost() {
             <input
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className=" w-full  outline-none p-2 text-xl  ml-4"
+              className=" w-full bg-transparent outline-none p-2 text-xl ml-4 dark:text-white"
               type="text"
               placeholder="What is happening?!"
             />
           </div>
-          <div className="flex items-center justify-between p-4 border-b border-gray-300">
-            <IoImagesOutline size="24px" />
+          <div className="flex items-center justify-end p-4 border-b border-gray-300 dark:border-gray-700">
             <button
-              className="bg-[#1D9BF0] rounded-full px-4 py-1 text- text-white border-none"
+              className="bg-[#1D9BF0] rounded-full px-4 py-1 text-white border-none hover:bg-[#1A8CD8] transition-colors"
               onClick={submitHandler}
             >
               Post

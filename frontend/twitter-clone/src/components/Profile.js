@@ -3,6 +3,7 @@ import { IoMdArrowBack } from "react-icons/io";
 import { Link, useParams } from "react-router-dom";
 import Avatar from "react-avatar";
 import { useSelector, useDispatch } from "react-redux";
+import { motion } from "framer-motion";
 
 import useGetProfile from "../hooks/useGetProfile.js";
 import axios from "axios";
@@ -79,7 +80,11 @@ function Profile() {
   };
 
   return (
-    <div className="w-[50%] border-l border-r border-gray-300 ">
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="w-[50%] border-l border-r border-gray-300 "
+    >
       <div>
         <div className="flex items-center py-2">
           <Link
@@ -161,7 +166,7 @@ function Profile() {
         isOpen={passwordOpen}
         onClose={() => setPasswordOpen(false)}
       />
-    </div>
+    </motion.div>
   );
 }
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaHeart } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 
 function GlobalLikeCounter() {
   const [likes, setLikes] = useState(0);
@@ -19,8 +20,6 @@ function GlobalLikeCounter() {
   const handleLike = async () => {
     // Optimistic UI update
     setLikes(prev => prev + 1);
-    
-    // Trigger animation frame
     setIsAnimating(true);
     setTimeout(() => setIsAnimating(false), 300);
 
@@ -33,15 +32,34 @@ function GlobalLikeCounter() {
   };
 
   return (
-    <div className="fixed top-6 right-6 z-50 flex items-center bg-white/80 dark:bg-black/80 backdrop-blur-md shadow-lg border border-gray-100 dark:border-gray-800 rounded-full px-4 py-2 hover:scale-105 transition-transform cursor-pointer" onClick={handleLike}>
-      <div className={`text-rose-500 flex items-center justify-center mr-2 ${isAnimating ? 'animate-ping' : ''}`}>
-        <FaHeart size="22px" className={`${isAnimating ? 'scale-125' : 'scale-100'} transition-transform duration-100`} />
+    <motion.button 
+      onClick={handleLike}
+      initial={{ y: -20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ duration: 0.2 }}
+      className="fixed top-6 right-6 z-50 flex items-center gap-2 bg-white dark:bg-[#18181b] backdrop-blur-md shadow-sm border border-gray-200 dark:border-zinc-800 rounded-full px-3 py-1.5 cursor-pointer text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-800"
+    >
+      <div className="relative flex items-center justify-center">
+          <FaHeart size="14px" className={`text-rose-500 transition-transform ${isAnimating ? 'scale-125' : ''}`} />
+          <AnimatePresence>
+            {isAnimating && (
+              <motion.div
+                initial={{ scale: 1, opacity: 0.8 }}
+                animate={{ scale: 2, opacity: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="absolute text-rose-500 pointer-events-none"
+              >
+                <FaHeart size="14px" />
+              </motion.div>
+            )}
+          </AnimatePresence>
       </div>
-      <div className="flex flex-col">
-          <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider leading-none">Project Likes</span>
-          <span className="text-lg font-black text-gray-900 dark:text-white leading-none">{likes.toLocaleString()}</span>
-      </div>
-    </div>
+      
+      <span className="text-sm font-semibold leading-none">{likes.toLocaleString()}</span>
+    </motion.button>
   );
 }
 
