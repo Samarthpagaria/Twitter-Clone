@@ -6,37 +6,61 @@ import { getOtherUser } from "./userController.js";
 
 export const createTweet = async (req, res) => {
   try {
-    const { description, id } = req.body;
+    const { description, id, replyTo } = req.body;
     if (!description || !id) {
       return res.status(401).json({
         message: "Fields are required",
         success: false,
       });
     }
-    const user = await User.findById(id).select("-password");
-    await Tweet.create({
+
+    const newTweet = await Tweet.create({
       description,
       userId: id,
-      userDetails: user,
+      replyTo: replyTo || null,
     });
 
+    if (replyTo) {
+      await Tweet.findByIdAndUpdate(replyTo, {
+        $inc: { commentCount: 1 }
+      });
+    }
+
     res.status(201).json({
-      message: "Tweet created successfully",
+      message: replyTo ? "Reply posted successfully" : "Tweet created successfully",
+      tweet: newTweet,
       success: true,
     });
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
 };
 
 export const deleteTweet = async (req, res) => {
   try {
     const { id } = req.params;
+  
+    const tweetToDelete = await Tweet.findById(id);
+    if (!tweetToDelete) {
+      return res.status(404).json({ message: "Tweet not found", success: false });
+    }
+
+    if (tweetToDelete.replyTo) {
+      await Tweet.findByIdAndUpdate(tweetToDelete.replyTo, {
+        $inc: { commentCount: -1 }
+      });
+    }
+
     await Tweet.findByIdAndDelete(id);
+
     return res.status(200).json({
       message: "Tweet deleted successfully",
       success: true,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
@@ -45,19 +69,17 @@ export const likeOrDislike = async (req, res) => {
     const loggedInUserId = req.body.id;
     const tweetId = req.params.id;
     const tweet = await Tweet.findById(tweetId);
-    if (tweet.like.includes(loggedInUserId)) {
-      //disslike tweet
+    if (tweet.likes.includes(loggedInUserId)) {
       await Tweet.findByIdAndUpdate(tweetId, {
-        $pull: { like: loggedInUserId },
+        $pull: { likes: loggedInUserId },
       });
       return res.status(200).json({
         message: "Disliked tweet",
         success: true,
       });
     } else {
-      //like tweet
       await Tweet.findByIdAndUpdate(tweetId, {
-        $push: { like: loggedInUserId },
+        $push: { likes: loggedInUserId },
       });
       return res.status(200).json({
         message: "Liked tweet",
@@ -74,13 +96,11 @@ export const getAllTweets = async (req, res) => {
     const id = req.params.id;
     const loggedInUser = await User.findById(id);
 
-    // 1. Logged in user tweets
     const loggedInUserTweets = await Tweet.find({ userId: id }).populate({
       path: "userId",
       select: "name username",
     });
 
-    // 2. Following user tweets
     const followingUserTweet = await Promise.all(
       loggedInUser.following.map((otherUsersId) => {
         return Tweet.find({ userId: otherUsersId }).populate({
@@ -90,8 +110,6 @@ export const getAllTweets = async (req, res) => {
       })
     );
 
-    // 3. Random tweets from unfollowed users
-    // Extract ObjectIds correctly for aggregation
     const excludeIds = [id, ...loggedInUser.following].map(
       (uid) => new mongoose.Types.ObjectId(uid)
     );
@@ -102,10 +120,8 @@ export const getAllTweets = async (req, res) => {
     ]);
     await Tweet.populate(randomTweets, { path: "userId", select: "name username" });
 
-    // Combine all arrays
     let allTweets = loggedInUserTweets.concat(...followingUserTweet, randomTweets);
 
-    // Sort combined tweets by newest first
     allTweets.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     return res.status(200).json({
@@ -156,7 +172,6 @@ export const getProfileTweets = async (req, res) => {
 };
 
 
-// Helper to escape special regex characters (prevents ReDoS attacks)
 const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 export const getSearchedTweets = async (req, res) => {
@@ -265,5 +280,25 @@ export const toggleBookmark = async (req, res) => {
   } catch (error) {
     console.error("Toggle Bookmark Error:", error);
     res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const getReplies = async (req, res) => {
+  try {
+    const tweetId = req.params.id;
+    const replies = await Tweet.find({ replyTo: tweetId })
+      .populate({
+        path: "userId",
+        select: "name username",
+      })
+      .sort({ createdAt: 1 }); // Oldest first, like a conversation
+      
+    return res.status(200).json({
+      tweets: replies,
+      success: true,
+    });
+  } catch (error) {
+    console.error("Error fetching replies:", error);
+    return res.status(500).json({ success: false, message: "Internal server error" });
   }
 };

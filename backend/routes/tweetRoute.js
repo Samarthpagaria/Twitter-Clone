@@ -8,6 +8,7 @@ import {
   getSearchedTweets,
   toggleBookmark,
   getProfileTweets,
+  getReplies,
 } from "../controllers/tweetController.js";
 import isAuthenticated from "../config/auth.js";
 
@@ -20,4 +21,6 @@ router.route("/followingtweets/:id").get(isAuthenticated, getfolowingTweets);
 router.route("/profiletweets/:id").get(isAuthenticated, getProfileTweets);
 router.route("/search").get(isAuthenticated, getSearchedTweets);
 router.route("/bookmark/:id").put(isAuthenticated, toggleBookmark);
+router.route("/replies/:id").get(isAuthenticated, getReplies);
+
 export default router;
