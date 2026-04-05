@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -12,7 +11,7 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
       trim: true,
-      lowercase: true, // Good practice for usernames
+      lowercase: true, 
     },
     email: {
       type: String,
@@ -24,10 +23,8 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-      minlength: 6, // Optional but recommended
+      minlength: 6, 
     },
-
-    // Better structure for followers & following
     followers: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -40,24 +37,20 @@ const userSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
-
-    // Bookmarks - Much better as array of ObjectIds with ref
     bookmarks: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Tweet",
       },
     ],
-
-    // Optional but useful fields for future
     bio: {
       type: String,
       maxlength: 160,
       default: "",
     },
-    profilePicture: {
+    avatar: {
       type: String,
-      default: "", // You can store Cloudinary URL later
+      default: "",
     },
     coverPicture: {
       type: String,
@@ -65,7 +58,7 @@ const userSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true, // Fixed typo: timeStamps → timestamps
+    timestamps: true,
   },
 );
 

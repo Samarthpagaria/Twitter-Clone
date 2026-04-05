@@ -1,6 +1,6 @@
 import User from "../models/UserSchema.js";
 import Tweet from "../models/tweetSchema.js";
-
+import uploadOnCloudinary from "../cloudinary/cloudinaryUpload.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
@@ -23,9 +23,24 @@ export const Register = async (req, res) => {
       });
     }
 
+    const avatarLocalFilePath = req.files?.avatar?.[0]?.path;
+    if (!avatarLocalFilePath) {
+      return res.status(400).json({
+        message: "Avatar image is required.",
+        success: false,
+      });
+    }
+    
+    const avatar = await uploadOnCloudinary(avatarLocalFilePath);
+    if (!avatar) {
+      return res.status(500).json({
+        message: "Error uploading avatar to cloud.",
+        success: false,
+      });
+    }
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    await User.create({ name, username, password: hashedPassword, email });
+    await User.create({ name, username, avatar: avatar.url, password: hashedPassword, email });
 
     return res.status(201).json({
       message: "Account created successfully.",
@@ -196,11 +211,24 @@ export const updateMyProfile = async (req, res) => {
   try {
     const id = req.params.id;
     const { name, username, email, bio } = req.body;
+    
+    let updateData = { name, username, email, bio };
+    
+    // Handle avatar update if provided
+    const avatarLocalFilePath = req.files?.avatar?.[0]?.path;
+    if (avatarLocalFilePath) {
+      const avatar = await uploadOnCloudinary(avatarLocalFilePath);
+      if (avatar) {
+        updateData.avatar = avatar.url;
+      }
+    }
+
     const user = await User.findByIdAndUpdate(
       id,
-      { name, username, email, bio },
+      updateData,
       { new: true, runValidators: true },
-    );
+    ).select("-password");
+
     return res.status(200).json({
       message: "Profile updated successfully.",
       user,
@@ -271,7 +299,6 @@ const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 export const searchUsers = async (req, res) => {
   try {
-    
     const keyword = req.query.name?.trim();
 
     if (!keyword) {
@@ -295,13 +322,12 @@ export const searchUsers = async (req, res) => {
       });
     }
 
-   
     const safeKeyword = escapeRegex(keyword);
 
     const searchRegex = new RegExp(safeKeyword, "i");
 
     const page = Math.max(1, parseInt(req.query.page) || 1);
-    const limit = Math.min(20, parseInt(req.query.limit) || 10);   
+    const limit = Math.min(20, parseInt(req.query.limit) || 10);
     const skip = (page - 1) * limit;
     const [users, total] = await Promise.all([
       User.find({
@@ -379,4 +405,3 @@ export const getBookmarks = async (req, res) => {
     });
   }
 };
-
