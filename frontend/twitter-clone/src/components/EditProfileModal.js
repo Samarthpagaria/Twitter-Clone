@@ -14,18 +14,45 @@ const EditProfileModal = ({ isOpen, onClose }) => {
     email: user?.email || "",
     bio: user?.bio || "",
   });
+  const [avatar, setAvatar] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(user?.avatar || "");
 
   const changeHandler = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setAvatar(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const submitHandler = async (e) => {
-    e.preventDefault();
     try {
+      const form = new FormData();
+      form.append("name", formData.name);
+      form.append("username", formData.username);
+      form.append("email", formData.email);
+      form.append("bio", formData.bio);
+      if (avatar) {
+        form.append("avatar", avatar);
+      }
+
       axios.defaults.withCredentials = true;
       const res = await axios.put(
         `${USER_API_ENDPOINT}/update/myprofile/${user?._id}`,
-        formData
+        form,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       if (res.data.success) {
         toast.success(res.data.message);
@@ -89,7 +116,6 @@ const EditProfileModal = ({ isOpen, onClose }) => {
               placeholder="email@example.com"
             />
           </div>
-
           <div>
             <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5 ml-1">Bio</label>
             <textarea
@@ -101,6 +127,23 @@ const EditProfileModal = ({ isOpen, onClose }) => {
               className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all resize-none dark:bg-zinc-900 dark:border-zinc-800 dark:text-white"
               placeholder="Tell us about yourself..."
             ></textarea>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-1.5 ml-1">Profile Picture</label>
+            <div className="flex items-center gap-4">
+              <img 
+                src={avatarPreview || "https://cdn-icons-png.freepik.com/512/3550/3550439.png"} 
+                alt="Avatar" 
+                className="w-16 h-16 rounded-full object-cover border border-gray-200"
+              />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarChange}
+                className="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+              />
+            </div>
           </div>
 
           <div className="flex justify-end gap-2 pt-4 border-t border-gray-50 mt-2">

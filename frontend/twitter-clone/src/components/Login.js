@@ -13,6 +13,8 @@ function Login() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [avatar, setAvatar] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -46,17 +48,21 @@ function Login() {
     } else {
       //signup
       try {
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("username", username);
+        formData.append("email", email);
+        formData.append("password", password);
+        if (avatar) {
+          formData.append("avatar", avatar);
+        }
+
         const res = await axios.post(
           `${USER_API_ENDPOINT}/register`,
-          {
-            name,
-            username,
-            email,
-            password,
-          },
+          formData,
           {
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": "multipart/form-data",
             },
             withCredentials: true,
           }
@@ -75,6 +81,20 @@ function Login() {
 
   const loginSignUpHandler = () => {
     setIsLogIn(!isLogin);
+    setAvatar(null);
+    setAvatarPreview(null);
+  };
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setAvatar(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
   return (
     <div className="w-screen h-screen flex items-center justify-center">
@@ -111,6 +131,20 @@ function Login() {
                   placeholder="Username"
                   className="outline-blue-500 border border-gray-800 px-3  font-semibold py-2 rounded-lg my-1"
                 />
+                <div className="flex flex-col my-1">
+                  <label className="text-sm font-semibold mb-1 text-gray-600">Profile Picture</label>
+                  <div className="flex items-center gap-4">
+                    {avatarPreview && (
+                      <img src={avatarPreview} alt="Avatar Preview" className="w-12 h-12 rounded-full object-cover border border-gray-300" />
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleAvatarChange}
+                      className="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                    />
+                  </div>
+                </div>
               </>
             )}
 

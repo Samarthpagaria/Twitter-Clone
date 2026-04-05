@@ -134,11 +134,11 @@ const Tweet = ({ tweet, isReply = false }) => {
         {/* LEFT COLUMN: Avatar + Vertical Trunk Line */}
         <div className="flex flex-col items-center mr-3 relative h-auto">
           <Avatar
-            src="https://cdn-icons-png.freepik.com/512/3550/3550439.png"
-            size={isReply ? "28" : "40"}
-            round={true}
-            className="z-10 bg-white"
-          />
+             src={tweetUser?.avatar || "https://cdn-icons-png.freepik.com/512/3550/3550439.png"}
+             size={isReply ? "28" : "40"}
+             round={true}
+             className="z-10 bg-white"
+           />
           {/* Trunk line bridging down to right column's replies */}
           {showReplies && replies.length > 0 && (
             <div className={`w-[2px] bg-gray-200 absolute z-0 ${isReply ? 'top-[32px]' : 'top-[44px]'} bottom-6`}></div>
@@ -156,6 +156,27 @@ const Tweet = ({ tweet, isReply = false }) => {
           <div>
             <p className="mt-1 text-sm sm:text-base text-gray-900">{tweet?.description}</p>
           </div>
+          {tweet?.media && tweet.media.length > 0 && (
+            <div className="mt-3 relative w-full overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-zinc-900">
+               {tweet.media.map((item, index) => (
+                 <div key={index}>
+                   {item.type === 'image' ? (
+                     <img 
+                       src={item.url} 
+                       alt="Tweet content" 
+                       className="w-full h-full max-h-[512px] object-contain"
+                     />
+                   ) : (
+                     <video 
+                       src={item.url} 
+                       controls 
+                       className="w-full h-full max-h-[512px] bg-black"
+                     />
+                   )}
+                 </div>
+               ))}
+            </div>
+          )}
           <div className="flex justify-between mt-2 mb-1 max-w-md">
             {/* Comment */}
             <div className="flex items-center">
@@ -218,7 +239,7 @@ const Tweet = ({ tweet, isReply = false }) => {
             <div className="w-full mt-1 mb-2">
                {/* Input for new reply */}
                <div className="flex items-center gap-2 mb-3 pt-2">
-                  <Avatar src="https://cdn-icons-png.freepik.com/512/3550/3550439.png" size="24" round={true} className="z-10 bg-white" />
+                  <Avatar src={user?.avatar || "https://cdn-icons-png.freepik.com/512/3550/3550439.png"} size="24" round={true} className="z-10 bg-white" />
                   <form onSubmit={submitReplyHandler} className="flex-1 flex bg-gray-50 border border-gray-200 rounded-full overflow-hidden focus-within:ring-1 focus-within:ring-cyan-500 focus-within:bg-white transition-all">
                      <input 
                        type="text" 
