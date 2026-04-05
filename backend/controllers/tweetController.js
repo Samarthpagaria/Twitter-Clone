@@ -1,6 +1,7 @@
 import Tweet from "../models/tweetSchema.js";
 import User from "../models/UserSchema.js";
 import mongoose from "mongoose";
+import uploadOnCloudinary from "../cloudinary/cloudinaryUpload.js";
 
 import { getOtherUser } from "./userController.js";
 
@@ -14,10 +15,45 @@ export const createTweet = async (req, res) => {
       });
     }
 
+    const videoLocalFilePath = req.files?.video?.[0]?.path;
+    const imageLocalFilePath = req.files?.image?.[0]?.path;
+    let media = [];
+
+    if (videoLocalFilePath) {
+      const uploadedVideo = await uploadOnCloudinary(videoLocalFilePath);
+      if (uploadedVideo) {
+        media.push({
+          url: uploadedVideo.url,
+          type: "video"
+        });
+      } else {
+        return res.status(500).json({
+          message: "Error uploading video to cloud.",
+          success: false,
+        });
+      }
+    }
+
+    if (imageLocalFilePath) {
+      const uploadedImage = await uploadOnCloudinary(imageLocalFilePath);
+      if (uploadedImage) {
+        media.push({
+          url: uploadedImage.url,
+          type: "image"
+        });
+      } else {
+        return res.status(500).json({
+          message: "Error uploading image to cloud.",
+          success: false,
+        });
+      }
+    }
+
     const newTweet = await Tweet.create({
       description,
       userId: id,
       replyTo: replyTo || null,
+      media,
     });
 
     if (replyTo) {

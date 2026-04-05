@@ -11,9 +11,13 @@ import {
   getReplies,
 } from "../controllers/tweetController.js";
 import isAuthenticated from "../config/auth.js";
+import { upload } from "../multer/config.js";
 
 const router = express.Router();
-router.route("/create").post(isAuthenticated, createTweet);
+router.route("/create").post(isAuthenticated, upload.fields([
+  { name: "video", maxCount: 1 },
+  { name: "image", maxCount: 1 }
+]), createTweet);
 router.route("/delete/:id").delete(isAuthenticated, deleteTweet);
 router.route("/like/:id").put(isAuthenticated, likeOrDislike);
 router.route("/alltweets/:id").get(isAuthenticated, getAllTweets);
