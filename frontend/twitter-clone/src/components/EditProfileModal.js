@@ -16,6 +16,7 @@ const EditProfileModal = ({ isOpen, onClose }) => {
   });
   const [avatar, setAvatar] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(user?.avatar || "");
+  const [isLoading, setIsLoading] = useState(false);
 
   const changeHandler = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -35,6 +36,7 @@ const EditProfileModal = ({ isOpen, onClose }) => {
 
   const submitHandler = async (e) => {
     try {
+      setIsLoading(true);
       const form = new FormData();
       form.append("name", formData.name);
       form.append("username", formData.username);
@@ -62,6 +64,8 @@ const EditProfileModal = ({ isOpen, onClose }) => {
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Error updating profile.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -156,9 +160,11 @@ const EditProfileModal = ({ isOpen, onClose }) => {
             </button>
             <button
               type="submit"
-              className="px-6 py-2 text-sm font-bold bg-black text-white hover:bg-gray-800 rounded-full transition-all active:scale-95"
+              disabled={isLoading}
+              className={`px-6 py-2 text-sm font-bold bg-black text-white hover:bg-gray-800 rounded-full transition-all active:scale-95 flex items-center gap-2 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
-              Save Changes
+              {isLoading && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>}
+              {isLoading ? 'Saving...' : 'Save Changes'}
             </button>
           </div>
         </form>

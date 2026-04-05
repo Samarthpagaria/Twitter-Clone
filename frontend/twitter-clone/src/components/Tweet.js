@@ -154,7 +154,7 @@ const Tweet = ({ tweet, isReply = false }) => {
             </p>
           </div>
           <div>
-            <p className="mt-1 text-sm sm:text-base text-gray-900">{tweet?.description}</p>
+            <p className="mt-1 text-sm sm:text-base text-gray-900 break-words dark:text-gray-100">{tweet?.description}</p>
           </div>
           {tweet?.media && tweet.media.length > 0 && (
             <div className="mt-3 relative w-full overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-zinc-900">
@@ -241,12 +241,12 @@ const Tweet = ({ tweet, isReply = false }) => {
                <div className="flex items-center gap-2 mb-3 pt-2">
                   <Avatar src={user?.avatar || "https://cdn-icons-png.freepik.com/512/3550/3550439.png"} size="24" round={true} className="z-10 bg-white" />
                   <form onSubmit={submitReplyHandler} className="flex-1 flex bg-gray-50 border border-gray-200 rounded-full overflow-hidden focus-within:ring-1 focus-within:ring-cyan-500 focus-within:bg-white transition-all">
-                     <input 
-                       type="text" 
+                     <textarea 
                        value={replyText}
                        onChange={(e) => setReplyText(e.target.value)}
                        placeholder="Post your reply..." 
-                       className="flex-1 bg-transparent px-4 py-1.5 outline-none text-sm text-gray-800"
+                       className="flex-1 bg-transparent px-4 py-2 outline-none text-sm text-gray-800 dark:text-white resize-none"
+                       rows={1}
                      />
                      <button 
                        type="submit" 

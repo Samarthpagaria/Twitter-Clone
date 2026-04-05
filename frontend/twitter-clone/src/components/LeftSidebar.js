@@ -137,9 +137,30 @@ function LeftSidebar() {
             </motion.div>
           </div>
         </motion.div>
-
-
       </motion.div>
+
+      {/* User Profile Section at Bottom */}
+      {user && (
+        <div className="mt-auto mb-4 mr-4">
+          <motion.div 
+            whileHover={{ backgroundColor: isDarkMode ? "rgba(39, 39, 42, 1)" : "rgba(229, 231, 235, 1)" }}
+            className="flex items-center gap-3 p-3 rounded-full cursor-pointer transition-colors"
+            onClick={() => navigate(`/profile/${user?._id}`)}
+          >
+            <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 dark:border-gray-700 flex-shrink-0">
+              <img 
+                src={user?.avatar || "https://cdn-icons-png.freepik.com/512/3550/3550439.png"} 
+                alt="user avatar" 
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="hidden xl:block overflow-hidden">
+              <h2 className="font-bold text-black dark:text-white truncate">{user?.name}</h2>
+              <p className="text-gray-500 text-sm truncate">@{user?.username}</p>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }

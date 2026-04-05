@@ -14,12 +14,14 @@ function CreatePost() {
   const [mediaFile, setMediaFile] = useState(null);
   const [mediaType, setMediaType] = useState(null); // 'image' or 'video'
   const [mediaPreview, setMediaPreview] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
   const submitHandler = async () => {
     if (!description && !mediaFile) return;
 
     try {
+      setIsLoading(true);
       const formData = new FormData();
       formData.append("description", description);
       formData.append("id", user?._id);
@@ -49,6 +51,8 @@ function CreatePost() {
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went wrong");
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -113,12 +117,12 @@ function CreatePost() {
                 round={true}
               />
             </div>
-            <input
+            <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className=" w-full bg-transparent outline-none p-2 text-xl ml-4 dark:text-white"
-              type="text"
+              className="w-full bg-transparent outline-none p-2 text-xl ml-4 dark:text-white resize-none min-h-[50px]"
               placeholder="What is happening?!"
+              rows={2}
             />
           </div>
           {mediaPreview && (
@@ -168,11 +172,12 @@ function CreatePost() {
               </label>
             </div>
             <button
-              disabled={!description && !mediaFile}
-              className={`${(!description && !mediaFile) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#1A8CD8]'} bg-[#1D9BF0] rounded-full px-6 py-2 text-white border-none font-bold transition-colors`}
+              disabled={isLoading || (!description && !mediaFile)}
+              className={`${(isLoading || (!description && !mediaFile)) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#1A8CD8]'} bg-[#1D9BF0] rounded-full px-6 py-2 text-white border-none font-bold transition-colors flex items-center gap-2`}
               onClick={submitHandler}
             >
-              Post
+              {isLoading && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>}
+              {isLoading ? 'Posting...' : 'Post'}
             </button>
           </div>
         </div>
