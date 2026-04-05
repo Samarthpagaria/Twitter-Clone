@@ -1,6 +1,6 @@
+import "dotenv/config";
 import express from "express";
 import dns from "dns";
-import dotenv from "dotenv";
 
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 import databaseConnection from "./config/database.js";
@@ -9,11 +9,6 @@ import userRoute from "./routes/userRoute.js";
 import tweetRoute from "./routes/tweetRoute.js";
 import siteRoute from "./routes/siteRoute.js";
 import cors from "cors";
-
-//Setting up path for .env file variables
-dotenv.config({
-  path: ".env",
-});
 
 //connecting to MongoDB
 databaseConnection();
