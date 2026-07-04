@@ -28,6 +28,7 @@ const Tweet = ({ tweet, isReply = false }) => {
   React.useEffect(() => {
     setLocalLikeCount(tweet?.likes?.length || 0);
     setIsLikedLocally(tweet?.likes?.includes(user?._id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tweet?.likes, user?._id]);
 
   const fetchReplies = async () => {
@@ -84,7 +85,7 @@ const Tweet = ({ tweet, isReply = false }) => {
       setIsLikedLocally(!isLikedLocally);
       setLocalLikeCount(prev => isLikedLocally ? prev - 1 : prev + 1);
 
-      const res = await axios.put(
+      await axios.put(
         `${TWEET_API_ENDPOINT}/like/${id}`,
         { id: user?._id },
         { withCredentials: true }
@@ -102,7 +103,7 @@ const Tweet = ({ tweet, isReply = false }) => {
   const deleteTweetHandler = async (id) => {
     try {
       axios.defaults.withCredentials = true;
-      const res = await axios.delete(`${TWEET_API_ENDPOINT}/delete/${id}`);
+      await axios.delete(`${TWEET_API_ENDPOINT}/delete/${id}`);
       dispatch(getRefresh());
       toast.success(res.data.message);
     } catch (error) {

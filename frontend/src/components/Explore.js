@@ -34,6 +34,7 @@ function Explore() {
       if(initialQuery !== query) {
           setQuery(initialQuery);
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialQuery]);
 
   // Fetch Logic based on URL parameter

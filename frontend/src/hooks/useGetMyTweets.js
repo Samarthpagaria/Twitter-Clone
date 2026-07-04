@@ -40,6 +40,7 @@ const useGetMyTweets = (id) => {
         followingTweetHandler();
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isActive, refresh, id]);
 };
 export default useGetMyTweets;
