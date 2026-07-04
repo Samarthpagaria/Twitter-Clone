@@ -101,7 +101,7 @@ function Login() {
   };
   return (
     <div className="w-screen h-screen flex items-center justify-center relative">
-      <div className="absolute top-6 right-8 flex items-center gap-4 z-50">
+      <div className="absolute bottom-6 right-8 flex items-center gap-4 z-50">
         <GlobalLikeCounter className="flex items-center gap-2 bg-white dark:bg-[#18181b] backdrop-blur-md shadow-sm border border-gray-200 dark:border-zinc-800 rounded-full px-3 py-1.5 cursor-pointer text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-800" />
         <Link to="/docs" className="flex items-center gap-2 bg-white dark:bg-[#18181b] backdrop-blur-md shadow-sm border border-gray-200 dark:border-zinc-800 rounded-full px-3 py-1.5 cursor-pointer text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-800">
           <FaBook size="14px" className="text-gray-600 dark:text-gray-300" />
