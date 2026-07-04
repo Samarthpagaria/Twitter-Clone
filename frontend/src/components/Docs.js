@@ -235,23 +235,7 @@ const Docs = () => {
             </table>
           </div>
 
-          <h3 className="mt-12">Site Stats <code>/api/v1/site</code></h3>
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-sm text-left">
-              <thead className="text-gray-500 bg-gray-50 dark:bg-zinc-800/50 uppercase">
-                <tr>
-                  <th className="px-4 py-3 border-b border-gray-100 dark:border-zinc-800/50 w-24">Method</th>
-                  <th className="px-4 py-3 border-b border-gray-100 dark:border-zinc-800/50">Endpoint Path</th>
-                  <th className="px-4 py-3 border-b border-gray-100 dark:border-zinc-800/50">Operation Description</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 dark:divide-zinc-800/50">
-                <tr><td className="px-4 py-3 font-mono text-blue-600 dark:text-blue-400">GET</td><td className="px-4 py-3 font-mono text-gray-900 dark:text-gray-300">/score</td><td className="px-4 py-3 text-gray-600 dark:text-gray-400">Fetch the global site-wide like score</td></tr>
-                <tr><td className="px-4 py-3 font-mono text-green-600 dark:text-green-400">POST</td><td className="px-4 py-3 font-mono text-gray-900 dark:text-gray-300">/score/increment</td><td className="px-4 py-3 text-gray-600 dark:text-gray-400">Increment the global like score by 1</td></tr>
-                <tr><td className="px-4 py-3 font-mono text-blue-600 dark:text-blue-400">GET</td><td className="px-4 py-3 font-mono text-gray-900 dark:text-gray-300">/health</td><td className="px-4 py-3 text-gray-600 dark:text-gray-400">Health/uptime check with DB + memory status</td></tr>
-              </tbody>
-            </table>
-          </div>
+
 
           <h2>7. Backend Details</h2>
           <p>The server runs a versioned REST API pattern with modular controllers and route files. Media staging and credential validation are handled via layered middleware.</p>

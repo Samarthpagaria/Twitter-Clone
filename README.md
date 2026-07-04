@@ -279,15 +279,6 @@ Decodes the JWT from `req.cookies.token`. If missing or invalid, throws a 401 er
 
 ---
 
-### 🗳️ Site Stats Routes (`/api/v1/site`)
-
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| `GET` | `/score` | ❌ | Fetch the global site-wide like score |
-| `POST` | `/score/increment` | ❌ | Increment the global like score by 1 |
-
----
-
 ## 🚀 Deployment Stack
 
 ### Backend — Render
