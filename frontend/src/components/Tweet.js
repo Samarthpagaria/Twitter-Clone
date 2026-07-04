@@ -103,7 +103,7 @@ const Tweet = ({ tweet, isReply = false }) => {
   const deleteTweetHandler = async (id) => {
     try {
       axios.defaults.withCredentials = true;
-      await axios.delete(`${TWEET_API_ENDPOINT}/delete/${id}`);
+      const res = await axios.delete(`${TWEET_API_ENDPOINT}/delete/${id}`);
       dispatch(getRefresh());
       toast.success(res.data.message);
     } catch (error) {
