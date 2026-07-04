@@ -6,7 +6,7 @@
 
 <br />
 <a href="https://twitterclone-sam-io.vercel.app" target="_blank">
-  <img src="https://abs.twimg.com/responsive-web/client-web/icon-ios.b1fc727a.png" alt="TwitterClone Logo" width="100" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg" alt="TwitterClone Logo" width="100" />
 </a>
 <br />
 
@@ -244,10 +244,12 @@ Decodes the JWT from `req.cookies.token`. If missing or invalid, throws a 401 er
 
 ---
 
+> **Legend:** ❌ = Route is public (No JWT required) | ✅ = Route is protected (Requires valid JWT cookie)
+
 ### 🔑 User Routes (`/api/v1/user`)
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
+| Method | Endpoint | Requires Login? | Description |
+|--------|----------|-----------------|-------------|
 | `POST` | `/register` | ❌ | Register new user (multipart: avatar required) |
 | `POST` | `/login` | ❌ | Login with email + password |
 | `GET` | `/logout` | ❌ | Clear JWT cookie and end session |
@@ -265,8 +267,8 @@ Decodes the JWT from `req.cookies.token`. If missing or invalid, throws a 401 er
 
 ### 🐦 Tweet Routes (`/api/v1/tweet`)
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
+| Method | Endpoint | Requires Login? | Description |
+|--------|----------|-----------------|-------------|
 | `POST` | `/create` | ✅ | Create a tweet or reply (multipart: video/image optional) |
 | `DELETE`| `/delete/:id` | ✅ | Delete a specific tweet |
 | `PUT` | `/like/:id` | ✅ | Toggle like state on a tweet |
