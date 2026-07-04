@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { IoMdArrowBack } from "react-icons/io";
 import { FaBookmark, FaRegComment } from "react-icons/fa";
@@ -21,7 +21,7 @@ const Bookmarks = () => {
   const [bookmarks, setBookmarks] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchBookmarks = async () => {
+  const fetchBookmarks = useCallback(async () => {
     try {
       setLoading(true);
       const res = await axios.get(`${USER_API_ENDPOINT}/bookmarks/${user?._id}`, {
@@ -33,11 +33,11 @@ const Bookmarks = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?._id]);
 
   useEffect(() => {
     if (user?._id) fetchBookmarks();
-  }, [user?._id, refresh]);
+  }, [user?._id, refresh, fetchBookmarks]);
 
   const bookmarkHandler = async (tweetId) => {
     try {
