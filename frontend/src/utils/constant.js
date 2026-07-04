@@ -1,5 +1,6 @@
-export const USER_API_ENDPOINT = "https://twitter-clone-u2a5.onrender.com/api/v1/user";
-export const TWEET_API_ENDPOINT = "https://twitter-clone-u2a5.onrender.com/api/v1/tweet";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
+export const USER_API_ENDPOINT = `${API_BASE_URL}/api/v1/user`;
+export const TWEET_API_ENDPOINT = `${API_BASE_URL}/api/v1/tweet`;
 
 export const timeSince = (timestamp) => {
   let time = Date.parse(timestamp);

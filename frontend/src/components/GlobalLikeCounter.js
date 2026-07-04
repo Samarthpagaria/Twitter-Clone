@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
+
 import { FaHeart } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -9,7 +12,7 @@ function GlobalLikeCounter() {
 
   useEffect(() => {
     // Fetch initial score
-    axios.get("https://twitter-clone-u2a5.onrender.com/api/v1/site/score")
+    axios.get(`${API_BASE_URL}/api/v1/site/score`)
       .then(res => {
           if(res.data.success) {
               setLikes(res.data.score);
@@ -24,7 +27,7 @@ function GlobalLikeCounter() {
     setTimeout(() => setIsAnimating(false), 300);
 
     try {
-      await axios.post("https://twitter-clone-u2a5.onrender.com/api/v1/site/score/increment");
+      await axios.post(`${API_BASE_URL}/api/v1/site/score/increment`);
     } catch (error) {
       // Revert if failed
       setLikes(prev => prev - 1);

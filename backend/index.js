@@ -23,7 +23,10 @@ app.use(express.json());
 app.use(cookieParser());
 
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: [
+    "http://localhost:3000",
+    "https://twitterclone-sam-io.vercel.app"
+  ],
   credentials: true,
 };
 app.use(cors(corsOptions));
