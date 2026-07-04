@@ -29,11 +29,21 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.get("/health", (req, res) => {
-  if (mongoose.connection.readyState === 1) {
-    res.status(200).json({ message: "Good health" });
-  } else {
-    res.status(500).json({ message: "Bad health" });
-  }
+  const isDbConnected = mongoose.connection.readyState === 1;
+  const status = isDbConnected ? "ok" : "not ok";
+  const statusCode = isDbConnected ? 200 : 500;
+
+  res.status(statusCode).json({
+    status: status,
+    timestamp: new Date().toISOString(),
+    uptime: `${Math.floor(process.uptime())} seconds`,
+    database: isDbConnected ? "connected" : "disconnected",
+    memory: {
+      rss: `${Math.round(process.memoryUsage().rss / 1024 / 1024)} MB`,
+      heapTotal: `${Math.round(process.memoryUsage().heapTotal / 1024 / 1024)} MB`,
+      heapUsed: `${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)} MB`,
+    }
+  });
 });
 
 app.use("/api/v1/user", userRoute);
