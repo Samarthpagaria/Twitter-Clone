@@ -16,6 +16,8 @@ import { persistStore } from "redux-persist";
 
 let persistor = persistStore(store);
 
+import Docs from "./components/Docs.js";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -42,6 +44,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/docs",
+    element: <Docs />,
   },
 ]);
 

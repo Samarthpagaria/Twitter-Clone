@@ -3,6 +3,7 @@ import twitterLogo from "../assets/twitterLogo.png";
 import { IoMdNotifications } from "react-icons/io";
 import { FaUser } from "react-icons/fa";
 import { FaBookmark } from "react-icons/fa6";
+import { FaBook } from "react-icons/fa";
 import { IoLogOut } from "react-icons/io5";
 import { LiaSlackHash } from "react-icons/lia";
 import { GoHomeFill } from "react-icons/go";
@@ -53,6 +54,7 @@ function LeftSidebar() {
     { title: "Notifications", icon: <IoMdNotifications size="28px" />, isDiv: true },
     { title: "Profile", icon: <FaUser size="26px" />, link: `/profile/${user?._id}` },
     { title: "Bookmarks", icon: <FaBookmark size="26px" />, link: "/bookmarks" },
+    { title: "Docs", icon: <FaBook size="26px" />, link: "/docs" },
   ];
 
   const ItemWrapper = ({ item }) => {

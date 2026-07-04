@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-function GlobalLikeCounter() {
+function GlobalLikeCounter({ className }) {
   const [likes, setLikes] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -41,7 +41,7 @@ function GlobalLikeCounter() {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       transition={{ duration: 0.2 }}
-      className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-white dark:bg-[#18181b] backdrop-blur-md shadow-sm border border-gray-200 dark:border-zinc-800 rounded-full px-3 py-1.5 cursor-pointer text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-800"
+      className={className || "fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-white dark:bg-[#18181b] backdrop-blur-md shadow-sm border border-gray-200 dark:border-zinc-800 rounded-full px-3 py-1.5 cursor-pointer text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-800"}
     >
       <div className="relative flex items-center justify-center">
           <FaHeart size="14px" className={`text-rose-500 transition-transform ${isAnimating ? 'scale-125' : ''}`} />
