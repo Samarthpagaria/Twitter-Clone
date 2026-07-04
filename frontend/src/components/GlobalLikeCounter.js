@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
-
 import { FaHeart } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 function GlobalLikeCounter() {
   const [likes, setLikes] = useState(0);
