@@ -1,8 +1,8 @@
 import "dotenv/config";
 import express from "express";
-import dns from "dns";
+import mongoose from "mongoose";
 
-dns.setServers(["8.8.8.8", "8.8.4.4"]);
+
 import databaseConnection from "./config/database.js";
 import cookieParser from "cookie-parser";
 import userRoute from "./routes/userRoute.js";
@@ -10,12 +10,9 @@ import tweetRoute from "./routes/tweetRoute.js";
 import siteRoute from "./routes/siteRoute.js";
 import cors from "cors";
 
-//connecting to MongoDB
 databaseConnection();
-//creating application
 const app = express();
 
-//middleware
 app.use(
   express.urlencoded({
     extended: true,
@@ -31,13 +28,18 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-//api
-//http://localhost:8080/api/v1/user/
+app.get("/health", (req, res) => {
+  if (mongoose.connection.readyState === 1) {
+    res.status(200).json({ message: "Good health" });
+  } else {
+    res.status(500).json({ message: "Bad health" });
+  }
+});
+
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/tweet", tweetRoute);
 app.use("/api/v1/site", siteRoute);
 
-//running application
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
 });

@@ -34,12 +34,12 @@ function GlobalLikeCounter() {
   return (
     <motion.button 
       onClick={handleLike}
-      initial={{ y: -20, opacity: 0 }}
+      initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       transition={{ duration: 0.2 }}
-      className="fixed top-6 right-6 z-50 flex items-center gap-2 bg-white dark:bg-[#18181b] backdrop-blur-md shadow-sm border border-gray-200 dark:border-zinc-800 rounded-full px-3 py-1.5 cursor-pointer text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-800"
+      className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-white dark:bg-[#18181b] backdrop-blur-md shadow-sm border border-gray-200 dark:border-zinc-800 rounded-full px-3 py-1.5 cursor-pointer text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-zinc-800"
     >
       <div className="relative flex items-center justify-center">
           <FaHeart size="14px" className={`text-rose-500 transition-transform ${isAnimating ? 'scale-125' : ''}`} />

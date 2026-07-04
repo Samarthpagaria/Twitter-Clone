@@ -6,7 +6,10 @@ import dotenv from "dotenv";
 const databaseConnection = () => {
   console.log("Connecting to:", process.env.MONGO_URL);
   mongoose
-    .connect(process.env.MONGO_URL, { family: 4 })
+    .connect(process.env.MONGO_URL, { 
+      family: 4,
+      tlsAllowInvalidCertificates: true
+    })
     .then(() => {
       console.log("Connected to MongoDB!");
     })
