@@ -6,7 +6,11 @@
 
 <br />
 <a href="https://twitterclone-sam-io.vercel.app" target="_blank">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/X_logo_2023.svg" alt="TwitterClone Logo" width="100" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/x/white">
+    <source media="(prefers-color-scheme: light)" srcset="https://cdn.simpleicons.org/x/black">
+    <img alt="TwitterClone Logo" src="https://cdn.simpleicons.org/x/black" width="80" />
+  </picture>
 </a>
 <br />
 
