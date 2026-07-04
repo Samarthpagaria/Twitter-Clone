@@ -283,7 +283,6 @@ const Docs = () => {
               <ul className="text-sm m-0 space-y-1">
                 <li><strong>Service Type:</strong> Web Service (Node.js)</li>
                 <li><strong>Start Command:</strong> <code>node index.js</code></li>
-                <li><strong>Port:</strong> 8080 (fallback default)</li>
                 <li><strong>Health Check:</strong> <code>/health</code></li>
                 <li><strong>Auto Deploy:</strong> via GitHub <code>main</code> branch</li>
               </ul>
