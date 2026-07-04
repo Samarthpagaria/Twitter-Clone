@@ -9,7 +9,7 @@ function GlobalLikeCounter() {
 
   useEffect(() => {
     // Fetch initial score
-    axios.get("http://localhost:8080/api/v1/site/score")
+    axios.get("https://twitter-clone-u2a5.onrender.com/api/v1/site/score")
       .then(res => {
           if(res.data.success) {
               setLikes(res.data.score);
@@ -24,7 +24,7 @@ function GlobalLikeCounter() {
     setTimeout(() => setIsAnimating(false), 300);
 
     try {
-      await axios.post("http://localhost:8080/api/v1/site/score/increment");
+      await axios.post("https://twitter-clone-u2a5.onrender.com/api/v1/site/score/increment");
     } catch (error) {
       // Revert if failed
       setLikes(prev => prev - 1);
