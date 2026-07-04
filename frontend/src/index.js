@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import Home from "./components/Home.js";
+import Docs from "./components/Docs.js";
 import Login from "./components/Login.js";
 import "./index.css";
 import Profile from "./components/Profile.js";
@@ -15,8 +16,6 @@ import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 
 let persistor = persistStore(store);
-
-import Docs from "./components/Docs.js";
 
 const router = createBrowserRouter([
   {

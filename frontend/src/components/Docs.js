@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { MdOutlineDarkMode, MdOutlineLightMode } from "react-icons/md";
 import { FaArrowLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import GlobalLikeCounter from "./GlobalLikeCounter";
 
 const Docs = () => {
