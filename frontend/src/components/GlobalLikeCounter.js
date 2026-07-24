@@ -3,7 +3,7 @@ import axios from "axios";
 import { FaHeart } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const API_BASE_URL = "https://twitter-clone-9ibi.onrender.com";
 
 function GlobalLikeCounter({ className }) {
   const [likes, setLikes] = useState(0);
