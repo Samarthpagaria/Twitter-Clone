@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const API_BASE_URL = "https://twitter-clone-9ibi.onrender.com";
 export const USER_API_ENDPOINT = `${API_BASE_URL}/api/v1/user`;
 export const TWEET_API_ENDPOINT = `${API_BASE_URL}/api/v1/tweet`;
 
